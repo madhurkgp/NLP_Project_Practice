@@ -14,7 +14,7 @@ def load_model_and_tokenizer():
     global model, tokenizer
     if model is None or tokenizer is None:
         try:
-            from keras.preprocessing.sequence import pad_sequences
+            from tensorflow.keras.preprocessing.sequence import pad_sequences
             from tensorflow.keras.models import load_model
             
             model_path = os.path.join(os.path.dirname(__file__), 'nextWord.h5')
@@ -32,7 +32,7 @@ def load_model_and_tokenizer():
 
 def generate_seq(model, tokenizer, seq_length, seed_text, n_words):
     """Generate next words based on input text"""
-    from keras.preprocessing.sequence import pad_sequences
+    from tensorflow.keras.preprocessing.sequence import pad_sequences
     
     result = list()
     in_text = seed_text

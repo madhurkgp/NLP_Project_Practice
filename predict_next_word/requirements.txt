@@ -1,0 +1,6 @@
+Flask==2.3.3
+numpy==1.24.3
+tensorflow==2.13.0
+keras==2.13.1
+protobuf==3.20.3
+Werkzeug==2.3.7

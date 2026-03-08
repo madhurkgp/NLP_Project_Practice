@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attrition Predictor</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 30px auto;
+            max-width: 800px;
+            overflow: hidden;
+        }
+
+        .header-section {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header-section p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            padding: 40px 30px;
+        }
+
+        .form-group-custom {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .form-group-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-label-custom {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-submit {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 10px;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .result-section {
+            margin: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            animation: slideIn 0.5s ease;
+        }
+
+        .result-stay {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .result-left {
+            background: linear-gradient(135deg, #feb692 0%, #ea5455 100%);
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group-text {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .form-section .row {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 15px;
+                border-radius: 15px;
+            }
+            
+            .header-section {
+                padding: 30px 20px;
+            }
+            
+            .header-section h1 {
+                font-size: 2rem;
+            }
+            
+            .form-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header-section">
+            <h1><i class="bi bi-people-fill"></i> Employee Attrition Predictor</h1>
+            <p>Analyze employee data to predict attrition risk using machine learning</p>
+        </div>
+
+        <div class="form-section">
+            <form method="post" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-person-fill"></i> Employee Name
+                            </label>
+                            <input name="Person Name" type="text" class="form-control" placeholder="Enter employee name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-geo-alt-fill"></i> Current Location
+                            </label>
+                            <select name="location" class="form-select" required>
+                                <option value="">Select location</option>
+                                <option value="7">Chennai</option>
+                                <option value="6">Noida</option>
+                                <option value="5">Bangalore</option>
+                                <option value="4">Hyderabad</option>
+                                <option value="3">Pune</option>
+                                <option value="2">Madurai</option>
+                                <option value="1">Other Place</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-briefcase-fill"></i> Employee Group
+                            </label>
+                            <select name="emp-group" class="form-select" required>
+                                <option value="">Select employee group</option>
+                                <option value="B1">B1</option>
+                                <option value="B2">B2</option>
+                                <option value="B3">B3</option>
+                                <option value="other group">Other Group</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-gear-fill"></i> Work Function
+                            </label>
+                            <select name="function" class="form-select" required>
+                                <option value="">Select function</option>
+                                <option value="Support">Support</option>
+                                <option value="Operation">Operation</option>
+                                <option value="Sales">Sales</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-gender-ambiguous"></i> Gender
+                            </label>
+                            <select name="gender" class="form-select" required>
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-clock-fill"></i> Tenure Group
+                            </label>
+                            <select name="tenure group" class="form-select" required>
+                                <option value="">Select tenure</option>
+                                <option value="< =1">≤ 1 year</option>
+                                <option value="> 1 & < =3">1-3 years</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-calendar-check-fill"></i> Experience (Years)
+                            </label>
+                            <div class="input-group">
+                                <input name="experience" type="number" step="0.01" class="form-control" placeholder="e.g., 5.5" required>
+                                <span class="input-group-text">years</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-person-badge-fill"></i> Age (Years)
+                            </label>
+                            <div class="input-group">
+                                <input name="age" type="number" step="0.01" class="form-control" placeholder="e.g., 28.5" required>
+                                <span class="input-group-text">years</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-heart-fill"></i> Marital Status
+                            </label>
+                            <select name="Marital" class="form-select" required>
+                                <option value="">Select status</option>
+                                <option value="Marr.">Married</option>
+                                <option value="Single">Single</option>
+                                <option value="Other status">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-person-plus-fill"></i> Hiring Source
+                            </label>
+                            <select name="Hiring" class="form-select" required>
+                                <option value="">Select source</option>
+                                <option value="Agency">Agency</option>
+                                <option value="Direct">Direct</option>
+                                <option value="Employee Referral">Employee Referral</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-trophy-fill"></i> Promotion Status
+                            </label>
+                            <select name="Promoted" class="form-select" required>
+                                <option value="">Select status</option>
+                                <option value="1">Promoted</option>
+                                <option value="0">Not Promoted</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">
+                                <i class="bi bi-check-circle-fill"></i> Job Role Match
+                            </label>
+                            <select name="Job" class="form-select" required>
+                                <option value="">Select match status</option>
+                                <option value="1">Job Role Matches</option>
+                                <option value="0">Job Role Doesn't Match</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" name="attrition_button" value="Save&Next" class="btn-submit">
+                        <i class="bi bi-cpu-fill"></i> Predict Attrition
+                    </button>
+                </div>
+            </form>
+
+            {% if result %}
+                <div class="result-section {% if 'Stay' in result %}result-stay{% else %}result-left{% endif %}">
+                    <i class="bi bi-graph-up-arrow" style="font-size: 2rem;"></i>
+                    <h3 class="mt-3">Prediction Result</h3>
+                    <p class="mb-0">Employee Status: <strong>{{ result }}</strong></p>
+                    {% if 'Stay' in result %}
+                        <p class="mb-0 mt-2"><i class="bi bi-shield-check-fill"></i> Low attrition risk detected</p>
+                    {% else %}
+                        <p class="mb-0 mt-2"><i class="bi bi-exclamation-triangle-fill"></i> High attrition risk detected</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Recognition - AI Voice Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin: 1rem 0;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .result-container {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            color: white;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .result-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-emotion {
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .emotion-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .feature {
+            padding: 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .feature i {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .instructions {
+            background: rgba(102, 126, 234, 0.05);
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 2rem 0;
+            text-align: left;
+            border-radius: 5px;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .instructions ol {
+            margin-left: 1.5rem;
+            color: #666;
+        }
+
+        .instructions li {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-microphone-alt"></i>
+        </div>
+        <h1>Emotion Recognition</h1>
+        <p class="subtitle">Advanced AI-powered voice emotion analysis</p>
+        
+        {% if response %}
+            <div class="result-container">
+                <div class="emotion-icon">
+                    {% if response == "happy" %}
+                        <i class="fas fa-laugh-beam"></i>
+                    {% elif response == "sad" %}
+                        <i class="fas fa-sad-tear"></i>
+                    {% elif response == "angry" %}
+                        <i class="fas fa-angry"></i>
+                    {% elif response == "fearful" %}
+                        <i class="fas fa-grimace"></i>
+                    {% elif response == "disgust" %}
+                        <i class="fas fa-meh"></i>
+                    {% elif response == "calm" %}
+                        <i class="fas fa-spa"></i>
+                    {% elif response == "surprised" %}
+                        <i class="fas fa-surprise"></i>
+                    {% else %}
+                        <i class="fas fa-robot"></i>
+                    {% endif %}
+                </div>
+                <div class="result-label">Detected Emotion:</div>
+                <div class="result-emotion">{{ response }}</div>
+            </div>
+        {% else %}
+            <div class="instructions">
+                <h3>How to use:</h3>
+                <ol>
+                    <li>Click the button below to upload an audio file</li>
+                    <li>Supported formats: WAV, MP3, FLAC</li>
+                    <li>Wait for the AI to analyze the emotion</li>
+                    <li>View the detected emotion result</li>
+                </ol>
+            </div>
+        {% endif %}
+        
+        <a href="{% url 'upload' %}" class="upload-btn">
+            <i class="fas fa-upload"></i> Upload Audio File
+        </a>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-brain"></i>
+                <p>Neural Network</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-music"></i>
+                <p>Audio Analysis</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-chart-line"></i>
+                <p>Real-time Processing</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <p>Privacy Secure</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

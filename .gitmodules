@@ -1,0 +1,7 @@
+[submodule "DeepLearning"]
+	path = DeepLearning
+	url = https://github.com/madhurkgp/DeepLearning.git
+
+[submodule "Machine_Learning"]
+	path = Machine_Learning
+	url = https://github.com/madhurkgp/machine_learning_projects.git

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Prediction Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .result-header {
+            padding: 40px 30px;
+            color: white;
+        }
+
+        .success-header {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+        }
+
+        .failure-header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .result-subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .result-body {
+            padding: 40px 30px;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .probability {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+        }
+
+        .probability-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .tips-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .tips-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .tips-list li:last-child {
+            border-bottom: none;
+        }
+
+        .tips-list li::before {
+            content: "✓";
+            color: #00b09b;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .btn-container {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .result-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .result-header {
+                padding: 30px 20px;
+            }
+
+            .result-body {
+                padding: 30px 20px;
+            }
+
+            .tips-section {
+                padding: 20px;
+            }
+
+            .btn-container {
+                padding: 20px;
+            }
+
+            .result-title {
+                font-size: 1.5rem;
+            }
+
+            .probability {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        {% if placed %}
+        <div class="result-header success-header">
+            <div class="result-icon">🎉</div>
+            <h1 class="result-title">Congratulations!</h1>
+            <p class="result-subtitle">{{ predictedclasssend }}</p>
+        </div>
+
+        <div class="result-body">
+            <p class="result-message">
+                Based on your academic profile and experience, you have a strong chance of getting placed!
+            </p>
+            
+            <div class="probability-label">Placement Probability</div>
+            <div class="probability">{{ predictedprob }}%</div>
+            
+            <div class="tips-section">
+                <h3 class="tips-title">Next Steps</h3>
+                <ul class="tips-list">
+                    <li>Continue building your technical skills</li>
+                    <li>Prepare for technical interviews</li>
+                    <li>Work on your communication skills</li>
+                    <li>Build a strong professional network</li>
+                    <li>Create an impressive portfolio</li>
+                </ul>
+            </div>
+        </div>
+        {% else %}
+        <div class="result-header failure-header">
+            <div class="result-icon">📚</div>
+            <h1 class="result-title">Keep Working!</h1>
+            <p class="result-subtitle">{{ predictedclasssend }}</p>
+        </div>
+
+        <div class="result-body">
+            <p class="result-message">
+                Based on your current profile, you may need to work harder to improve your placement chances.
+            </p>
+            
+            <div class="tips-section">
+                <h3 class="tips-title">Improvement Tips</h3>
+                <ul class="tips-list">
+                    <li>Focus on improving your academic scores</li>
+                    <li>Gain relevant work experience through internships</li>
+                    <li>Develop strong technical and soft skills</li>
+                    <li>Practice aptitude and technical problems</li>
+                    <li>Build projects to showcase your skills</li>
+                    <li>Network with professionals in your field</li>
+                    <li>Prepare thoroughly for interviews</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="btn-container">
+            <a href="/" class="btn">Try Again</a>
+        </div>
+    </div>
+</body>
+</html>

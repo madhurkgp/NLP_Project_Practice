@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Chart JS -->
+
+    <!-- datasource -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datasource@0.1.0"></script>
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <title>Car Accessibility Prediction</title>
+</head>
+
+<body>
+
+    <h1 class="text-center">Car Accessibility Prediction</h1>
+    <div class="container my-4">
+
+        <div class="row">
+
+            <div class="col my-4">
+
+                <div class="alert alert-info" role="alert">
+                    <h5>Car Evaluation Dataset</h5>
+                    <p>This application predicts car acceptability based on various features including buying price, maintenance cost, doors, persons capacity, luggage boot size, and safety rating.</p>
+                </div>
+            </div>
+
+            <div class="col my-4">
+
+                <h3 class="text-center">Car Accessibility Predictor</h3>
+
+                <!-- Dropdown -->
+                <br>
+
+                <div class="row">
+
+                    <div class="col">
+                        <form action="/" method="POST">
+                             
+                            <div class="form-group my-4 mx-4 text-center">
+                                <h5 class="text-center">Select Feature for EDA</h5>
+                                <select class="form-control" id="feature" name="feature">
+                                        <option value="buying">Buying</option>
+                                        <option value="maint">Maitainance</option>
+                                        <option value="doors">Doors</option>
+                                        <option value="persons">Persons</option>
+                                        <option value="lug_boot">Luggage</option>
+                                        <option value="safety">Safety</option>
+
+                                    </select>
+                            </div>
+
+                             <div class="form-group my-4 mx-4">
+                                
+                                
+                                    <!--Buying Mode-->
+                                    <div class="form-group">
+                                        <label for="tech">Select the Buying Mode</label>
+                                        <select class="form-control" id="tech" name="buy">
+                                                <option value="0">High</option>
+                                                <option value="1">Low</option>
+                                                <option value="2">Medium</option>
+                                                <option value="3">Very High</option>
+                                        </select>
+                                    </div>
+                                        
+
+                                    
+                                    <!--Maintainence Mode-->
+
+                                    <div class="form-group">
+                                        <label for="tech">Select the Maitainance Mode</label>
+                                        <select class="form-control" id="tech" name="maintain">
+                                                <option value="0">High</option>
+                                                <option value="1">Low</option>
+                                                <option value="2">Medium</option>
+                                                <option value="3">Very High</option>
+                                        </select>
+                                    </div>
+
+                                    <!--Doors-->
+                                    <div class="form-group">
+                                        <label for="tech">Select the Number of Doors</label>
+                                        <select class="form-control" id="tech" name="doors">
+                                                <option value="0">Two</option>
+                                                <option value="1">Three</option>
+                                                <option value="2">Four</option>
+                                                <option value="3">Five or More</option>
+                                        </select>
+                                    </div>
+
+                                    <!--Persons-->
+                                    <div class="form-group">
+                                        <label for="tech">How many Persons can be Accomodated</label>
+                                        <select class="form-control" id="tech" name="person">
+                                                <option value="0">Two</option>
+                                                <option value="1">Four</option>
+                                                <option value="2">More</option>
+                                        </select>
+                                    </div>
+
+                                    <!--Luggage boot-->
+
+                                    <div class="form-group">
+                                        <label for="tech">Select the Luggage Section</label>
+                                        <select class="form-control" id="tech" name="luggage">
+                                                <option value="0">big</option>
+                                                <option value="1">med</option>
+                                                <option value="2">small</option>
+                                        </select>
+                                    </div>
+
+                                    <!--Safety-->
+
+                                    <div class="form-group">
+                                        <label for="tech">Select the Safety Medium</label>
+                                        <select class="form-control" id="tech" name="safety">
+                                                <option value="0">High</option>
+                                                <option value="1">Low</option>
+                                                <option value="2">Medium</option>
+                                        </select>
+                                    </div>
+
+                                    <!--Select the Classifier-->
+                                    <div class="form-group">
+                                        <label for="tech">Select the Classifier</label>
+                                        <select class="form-control" id="tech" name="algo">
+                                                <option value="rf">Random Forest Classifier</option>
+                                                <option value="dt">Decision Tree Classifier</option>
+                                                <option value="svc">Support Vector Classifier</option>
+                                        </select>
+                                    </div>
+
+
+                                    <!-- button -->
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Predict</button>
+                                    </div>
+                             </div>
+
+
+
+                        </form>
+                    </div>
+
+
+                    {%if display%}
+
+
+                        <!-- Number of Subscribers Domain Wise -->
+
+                        <div class="col">
+
+                            <div class="card-body">
+                                <label for="banana" style="text-align:center;font-size:1.2rem;font-weight: bold;">Contribution of
+                                        {{value}} towards Status of the Car</label>
+                                <div class="chart-container my-3" style="position: relative;">
+                                    <canvas height="400" width="400" id="chart"></canvas>
+                                </div>
+                            </div>
+                            
+
+
+                        </div>
+
+                        
+                        {%if showtemplate%}
+
+                            <div class="alert alert-success" role="alert">
+                                <h4 class="alert-heading">Well done!</h4>
+                                <p>Based on the above details filled,the Overall Car Acceptability is : {{predictedclass}} with an accuracy of {{accuracy}} %</p>
+                                <hr>
+                            </div>
+                        {%endif%}
+
+                    
+
+                    {%else%}
+
+                        <div class="alert alert-info mx-4 my-4" role="alert">
+                            <h5>About Car Evaluation</h5>
+                            <p>Select different features and algorithms to predict car acceptability. The chart shows the distribution of the selected feature.</p>
+                        </div>
+
+                    {%endif%}
+
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+    {%block javascript%}
+
+        <script>
+            var mapper = {{mapper | safe}};
+            console.log(mapper);
+
+            var keys = new Array();
+            var values = new Array();
+
+            for (const item in mapper) {
+                keys.push(item)
+                values.push(mapper[item])
+            }
+
+
+
+
+
+            // Chart1
+
+            var ctx = document.getElementById('chart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: keys,
+                    datasets: [{
+                        label: keys,
+                        data: values,
+                        backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(75, 192, 192)',
+                            'rgb(255, 205, 86)',
+                            'rgb(201, 203, 207)',
+                            'rgb(54, 162, 235)',
+                            'rgba(153, 102, 255)',
+                            'rgba(255, 159, 64)',
+                            'rgba(250, 157, 60)'
+                        ],
+                        hoverOffset: 4
+
+                    }]
+                }
+            })
+        </script>
+
+    {%endblock%}
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>

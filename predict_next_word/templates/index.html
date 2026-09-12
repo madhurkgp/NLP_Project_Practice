@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predicting the next word</title>
+    <style>
+        body{
+            background-color: #ee2d14;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3CradialGradient id='a' gradientUnits='objectBoundingBox'%3E%3Cstop offset='0' stop-color='%23ffba2c'/%3E%3Cstop offset='1' stop-color='%23ee2d14'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='0' y1='750' x2='1550' y2='750'%3E%3Cstop offset='0' stop-color='%23f77420'/%3E%3Cstop offset='1' stop-color='%23ee2d14'/%3E%3C/linearGradient%3E%3Cpath id='s' fill='url(%23b)' d='M1549.2 51.6c-5.4 99.1-20.2 197.6-44.2 293.6c-24.1 96-57.4 189.4-99.3 278.6c-41.9 89.2-92.4 174.1-150.3 253.3c-58 79.2-123.4 152.6-195.1 219c-71.7 66.4-149.6 125.8-232.2 177.2c-82.7 51.4-170.1 94.7-260.7 129.1c-90.6 34.4-184.4 60-279.5 76.3C192.6 1495 96.1 1502 0 1500c96.1-2.1 191.8-13.3 285.4-33.6c93.6-20.2 185-49.5 272.5-87.2c87.6-37.7 171.3-83.8 249.6-137.3c78.4-53.5 151.5-114.5 217.9-181.7c66.5-67.2 126.4-140.7 178.6-218.9c52.3-78.3 96.9-161.4 133-247.9c36.1-86.5 63.8-176.2 82.6-267.6c18.8-91.4 28.6-184.4 29.6-277.4c0.3-27.6 23.2-48.7 50.8-48.4s49.5 21.8 49.2 49.5c0 0.7 0 1.3-0.1 2L1549.2 51.6z'/%3E%3Cg id='g'%3E%3Cuse href='%23s' transform='scale(0.12) rotate(60)'/%3E%3Cuse href='%23s' transform='scale(0.2) rotate(10)'/%3E%3Cuse href='%23s' transform='scale(0.25) rotate(40)'/%3E%3Cuse href='%23s' transform='scale(0.3) rotate(-20)'/%3E%3Cuse href='%23s' transform='scale(0.4) rotate(-30)'/%3E%3Cuse href='%23s' transform='scale(0.5) rotate(20)'/%3E%3Cuse href='%23s' transform='scale(0.6) rotate(60)'/%3E%3Cuse href='%23s' transform='scale(0.7) rotate(10)'/%3E%3Cuse href='%23s' transform='scale(0.835) rotate(-40)'/%3E%3Cuse href='%23s' transform='scale(0.9) rotate(40)'/%3E%3Cuse href='%23s' transform='scale(1.05) rotate(25)'/%3E%3Cuse href='%23s' transform='scale(1.2) rotate(8)'/%3E%3Cuse href='%23s' transform='scale(1.333) rotate(-60)'/%3E%3Cuse href='%23s' transform='scale(1.45) rotate(-30)'/%3E%3Cuse href='%23s' transform='scale(1.6) rotate(10)'/%3E%3C/g%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23a)'/%3E%3Cg %3E%3Cuse href='%23g' transform='translate(0 0)'/%3E%3Cuse href='%23g' transform='translate(0 1500)'/%3E%3Cuse href='%23g' transform='translate(1500 0)'/%3E%3Cuse href='%23g' transform='translate(1500 1500)'/%3E%3Cuse href='%23g' transform='translate(750 0)'/%3E%3Cuse href='%23g' transform='translate(750 1500)'/%3E%3Cuse href='%23g' transform='translate(0 750)'/%3E%3Cuse href='%23g' transform='translate(1500 750)'/%3E%3Cuse href='%23g' transform='translate(750 750)'/%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search {
+            margin-bottom: 20px;
+        }
+
+        input.searchTerm {
+            width: 100%;
+            border: 3px solid #00B4CC;
+            padding: 15px;
+            height: 50px;
+            border-radius: 5px;
+            outline: none;
+            color: #333;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input.searchTerm:focus{
+            color: #00B4CC;
+            border-color: #0056b3;
+        }
+
+        button.searchButton {
+            width: 100%;
+            height: 50px;
+            border: none;
+            background: #00B4CC;
+            text-align: center;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button.searchButton:hover {
+            background: #0056b3;
+        }
+
+        .info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #00B4CC;
+        }
+
+        .info h2 {
+            color: #333;
+            margin-top: 0;
+            font-size: 16px;
+        }
+
+        .result {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Next Word Prediction</h1>
+        
+        <form method="post" action="/predict">
+            <div class="search">
+                <input name="Name" type="text" class="searchTerm" placeholder="Type your sentence here..." required>
+            </div>
+            
+            <div class="info">
+                <h2><strong>Example:</strong> "after ages which few great writers have ever been able to anticipate for themselves they do not perceive the want of connexion in their own writings or the gaps in their systems which are visible enough to those who come after them in the beginnings of literature and philosophy amid the"</h2>
+                <h2><strong>Note:</strong> The sentence should have approximately 50 tokens/words for best results</h2>
+                <h2><strong>Output:</strong> The system will predict the next 12 words</h2>
+            </div>
+            
+            <button type="submit" class="searchButton">Predict Next Words</button>
+        </form>
+        
+        {% if response %}
+            {% if "Error:" in response or "Please enter" in response or "Input the word" in response %}
+                <div class="error">{{ response }}</div>
+            {% else %}
+                <div class="result">The next word(s) will be: {{ response }}</div>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
